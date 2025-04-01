@@ -131,15 +131,20 @@ fastify.post('/api/delete', async function (req, reply){
     }
 })
 
-const start = async()=>{
-    await startDb()
-    try {
-        await fastify.listen({port:4000})
-        console.log("Server is running on http://localhost:4000");
+export default async (req, res) => {
+    await startDb();
+    await fastify.ready();
+    fastify.server.emit("request", req, res);
+};
+// const start = async()=>{
+//     await startDb()
+//     try {
+//         await fastify.listen({port:4000})
+//         console.log("Server is running on http://localhost:4000");
         
-    } catch (err) {
-        fastify.log.error(err)
-        process.exit(1)
-    }
-}
-start()
+//     } catch (err) {
+//         fastify.log.error(err)
+//         process.exit(1)
+//     }
+// }
+// start()
